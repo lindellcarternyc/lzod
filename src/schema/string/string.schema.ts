@@ -19,6 +19,8 @@ export class StringSchema extends SchemaClass<string> {
     value: false,
   };
 
+  private valueStarts?: ParserArgs<string>;
+
   private required_error?: string;
   private invalid_type_errpr?: string;
 
@@ -68,6 +70,16 @@ export class StringSchema extends SchemaClass<string> {
       throw new Error(`Expected a valid email address.`);
     }
 
+    if (
+      this.valueStarts !== undefined &&
+      value.startsWith(this.valueStarts.value) === false
+    ) {
+      if (this.valueStarts.message) throw new Error(this.valueStarts.message);
+      throw new Error(
+        `Expected value to start with '${this.valueStarts.value}'.`
+      );
+    }
+
     return value;
   };
 
@@ -98,6 +110,14 @@ export class StringSchema extends SchemaClass<string> {
   email: SchemaBuilder<string> = (opts): this => {
     this.isEmail = {
       value: true,
+      ...opts,
+    };
+    return this;
+  };
+
+  startsWith: SchemaBuilder<string, string> = (head, opts): this => {
+    this.valueStarts = {
+      value: head,
       ...opts,
     };
     return this;

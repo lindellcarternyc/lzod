@@ -86,4 +86,12 @@ describe(stringSchema, () => {
       ).toThrow('NOT AN EMAIL');
     });
   });
+
+  describe('startsWith', () => {
+    it('ensures a string starts with a substring', () => {
+      const s = stringSchema().startsWith('hello');
+      expect(s.parse('hello world')).toBe('hello world');
+      expect(() => s.parse('nope')).toThrow(`'hello'`);
+    });
+  });
 });
