@@ -16,6 +16,6 @@ export abstract class SchemaClass<T> implements Schema<T> {
   abstract parse(_: unknown): T;
 }
 
-export type SchemaBuilder<SchemaType, Arg = never> = Arg extends never
+export type SchemaBuilder<SchemaType, Arg = null> = Arg extends null | undefined
   ? (opts?: { message: string }) => SchemaClass<SchemaType>
   : (_: Arg, opts?: { message: string }) => SchemaClass<SchemaType>;
