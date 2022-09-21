@@ -1,3 +1,10 @@
+import {
+  SchemaClass,
+  ParserArgs,
+  SchemaArgs,
+  SchemaBuilder,
+} from '../../lzod.types';
+
 export class StringSchema extends SchemaClass<string> {
   private minLength?: ParserArgs<number>;
 
