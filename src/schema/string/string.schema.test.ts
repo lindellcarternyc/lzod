@@ -94,4 +94,20 @@ describe(stringSchema, () => {
       expect(() => s.parse('nope')).toThrow(`'hello'`);
     });
   });
+
+  describe('endsWith', () => {
+    it('ensures a string ends with an expected substring', () => {
+      expect(stringSchema().endsWith('world').parse('hello world')).toBe(
+        'hello world'
+      );
+
+      expect(() => stringSchema().endsWith('world').parse('nope')).toThrow(
+        "'world'"
+      );
+
+      expect(() => {
+        stringSchema().endsWith('world', { message: 'NOPE' }).parse('');
+      }).toThrow('NOPE');
+    });
+  });
 });

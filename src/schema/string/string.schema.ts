@@ -21,6 +21,8 @@ export class StringSchema extends SchemaClass<string> {
 
   private valueStarts?: ParserArgs<string>;
 
+  private valueEnds?: ParserArgs<string>;
+
   private required_error?: string;
   private invalid_type_errpr?: string;
 
@@ -80,6 +82,14 @@ export class StringSchema extends SchemaClass<string> {
       );
     }
 
+    if (
+      this.valueEnds !== undefined &&
+      value.endsWith(this.valueEnds.value) === false
+    ) {
+      if (this.valueEnds.message) throw new Error(this.valueEnds.message);
+      throw new Error(`Expected value to end with '${this.valueEnds.value}'.`);
+    }
+
     return value;
   };
 
@@ -118,6 +128,14 @@ export class StringSchema extends SchemaClass<string> {
   startsWith: SchemaBuilder<string, string> = (head, opts): this => {
     this.valueStarts = {
       value: head,
+      ...opts,
+    };
+    return this;
+  };
+
+  endsWith: SchemaBuilder<string, string> = (tail, opts): this => {
+    this.valueEnds = {
+      value: tail,
       ...opts,
     };
     return this;
