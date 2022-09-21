@@ -12,6 +12,10 @@ export class StringSchema extends SchemaClass<string> {
 
   private valueLength?: ParserArgs<number>;
 
+  private isEmail: ParserArgs<boolean> = {
+    value: false,
+  };
+
   private required_error?: string;
   private invalid_type_errpr?: string;
 
@@ -56,6 +60,16 @@ export class StringSchema extends SchemaClass<string> {
       );
     }
 
+    if (
+      this.isEmail.value &&
+      !/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        value
+      )
+    ) {
+      if (this.isEmail.message) throw new Error(this.isEmail.message);
+      throw new Error(`Expected a valid email address.`);
+    }
+
     return value;
   };
 
@@ -78,6 +92,14 @@ export class StringSchema extends SchemaClass<string> {
   length: SchemaBuilder<string, number> = (valueLength, opts): this => {
     this.valueLength = {
       value: valueLength,
+      ...opts,
+    };
+    return this;
+  };
+
+  email: SchemaBuilder<string> = (opts): this => {
+    this.isEmail = {
+      value: true,
       ...opts,
     };
     return this;

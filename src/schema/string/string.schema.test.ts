@@ -75,4 +75,15 @@ describe(stringSchema, () => {
       expect(() => s.parse('123')).toThrow('NOT ONE');
     });
   });
+
+  describe('email', () => {
+    it('ensures a valid email', () => {
+      const email = stringSchema().email();
+      expect(email.parse('email@test.com')).toBe('email@test.com');
+      expect(() => email.parse('hello')).toThrow('email');
+      expect(() =>
+        stringSchema().email({ message: 'NOT AN EMAIL' }).parse('hello')
+      ).toThrow('NOT AN EMAIL');
+    });
+  });
 });
