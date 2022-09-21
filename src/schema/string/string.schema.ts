@@ -5,6 +5,9 @@ import {
   SchemaBuilder,
 } from '../../lzod.types';
 
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
 export class StringSchema extends SchemaClass<string> {
   private minLength?: ParserArgs<number>;
 
@@ -60,12 +63,7 @@ export class StringSchema extends SchemaClass<string> {
       );
     }
 
-    if (
-      this.isEmail.value &&
-      !/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-        value
-      )
-    ) {
+    if (this.isEmail.value && EMAIL_REGEX.test(value) === false) {
       if (this.isEmail.message) throw new Error(this.isEmail.message);
       throw new Error(`Expected a valid email address.`);
     }
