@@ -1,18 +1,4 @@
-interface Schema<T> {
-  parse: (value: unknown) => T;
-}
-
-interface StringSchemaArgs {
-  required_error?: string;
-  invalid_type_error?: string;
-}
-
-interface ParserArgs<Value> {
-  value: Value;
-  message?: string;
-}
-
-export class StringSchema implements Schema<string> {
+export class StringSchema extends SchemaClass<string> {
   private minLength?: ParserArgs<number>;
 
   private maxLength?: ParserArgs<number>;
@@ -22,12 +8,13 @@ export class StringSchema implements Schema<string> {
   private required_error?: string;
   private invalid_type_errpr?: string;
 
-  constructor({ required_error, invalid_type_error }: StringSchemaArgs = {}) {
+  constructor({ required_error, invalid_type_error }: SchemaArgs = {}) {
+    super();
     this.required_error = required_error;
     this.invalid_type_errpr = invalid_type_error;
   }
 
-  parse(value: unknown): string {
+  parse = (value: unknown): string => {
     if (value === null || value === undefined) {
       if (this.required_error) throw new Error(this.required_error);
       throw new Error(`This value is required. Got ${value}`);
@@ -63,33 +50,33 @@ export class StringSchema implements Schema<string> {
     }
 
     return value;
-  }
+  };
 
-  min(minLength: number, opts?: { message: string }): this {
+  min: SchemaBuilder<string, number> = (minLength, opts): this => {
     this.minLength = {
       value: minLength,
       ...opts,
     };
     return this;
-  }
+  };
 
-  max(maxLength: number, opts?: { message: string }): this {
+  max: SchemaBuilder<string, number> = (maxLength, opts): this => {
     this.maxLength = {
       value: maxLength,
       ...opts,
     };
     return this;
-  }
+  };
 
-  length(valueLength: number, opts?: { message: string }): this {
+  length: SchemaBuilder<string, number> = (valueLength, opts): this => {
     this.valueLength = {
       value: valueLength,
       ...opts,
     };
     return this;
-  }
+  };
 }
 
-export const stringSchema = (args: StringSchemaArgs = {}): StringSchema => {
+export const stringSchema = (args: SchemaArgs = {}): StringSchema => {
   return new StringSchema(args);
 };
