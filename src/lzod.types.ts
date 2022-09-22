@@ -1,4 +1,4 @@
-interface Schema<T> {
+export interface Schema<T> {
   parse: (value: unknown) => T;
 }
 
@@ -12,10 +12,6 @@ export interface ParserArgs<Value> {
   message?: string;
 }
 
-export abstract class SchemaClass<T> implements Schema<T> {
-  abstract parse(_: unknown): T;
-}
-
 export type SchemaBuilder<SchemaType, Arg = null> = Arg extends null | undefined
-  ? (opts?: { message: string }) => SchemaClass<SchemaType>
-  : (_: Arg, opts?: { message: string }) => SchemaClass<SchemaType>;
+  ? (opts?: { message: string }) => Schema<SchemaType>
+  : (_: Arg, opts?: { message: string }) => Schema<SchemaType>;
