@@ -91,7 +91,8 @@ describe(stringSchema, () => {
     it('ensures a string starts with a substring', () => {
       const s = stringSchema().startsWith('hello');
       expect(s.parse('hello world')).toBe('hello world');
-      expect(() => s.parse('nope')).toThrow(`'hello'`);
+      // eslint-disable-next-line quotes
+      expect(() => s.parse('nope')).toThrow("'hello'");
     });
   });
 
@@ -102,6 +103,7 @@ describe(stringSchema, () => {
       );
 
       expect(() => stringSchema().endsWith('world').parse('nope')).toThrow(
+        // eslint-disable-next-line quotes
         "'world'"
       );
 
