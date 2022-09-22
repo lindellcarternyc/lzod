@@ -69,7 +69,7 @@ export class StringSchema extends SchemaClass<string> {
 
     if (this.isEmail.value && EMAIL_REGEX.test(value) === false) {
       if (this.isEmail.message) throw new Error(this.isEmail.message);
-      throw new Error(`Expected a valid email address.`);
+      throw new Error('Expected a valid email address.');
     }
 
     if (
