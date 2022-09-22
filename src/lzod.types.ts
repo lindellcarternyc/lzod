@@ -12,6 +12,10 @@ export interface ParserArgs<Value> {
   message?: string;
 }
 
+export type SchemaFactory<SchemaType> = (
+  args?: SchemaArgs
+) => Schema<SchemaType>;
+
 export type SchemaBuilder<SchemaType, Arg = null> = Arg extends null | undefined
   ? (opts?: { message: string }) => Schema<SchemaType>
   : (_: Arg, opts?: { message: string }) => Schema<SchemaType>;
