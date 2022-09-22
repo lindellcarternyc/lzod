@@ -1,14 +1,12 @@
-import {
-  SchemaClass,
-  ParserArgs,
-  SchemaArgs,
-  SchemaBuilder,
-} from '../../lzod.types';
+import { ParserArgs, SchemaArgs, SchemaBuilder } from '../../lzod.types';
+import { BaseSchema } from '../base/base.schema';
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-export class StringSchema extends SchemaClass<string> {
+const isString = (x: unknown): x is string => typeof x === 'string';
+
+export class StringSchema extends BaseSchema<string> {
   private minLength?: ParserArgs<number>;
 
   private maxLength?: ParserArgs<number>;
@@ -23,58 +21,51 @@ export class StringSchema extends SchemaClass<string> {
 
   private valueEnds?: ParserArgs<string>;
 
-  private required_error?: string;
-  private invalid_type_errpr?: string;
-
-  constructor({ required_error, invalid_type_error }: SchemaArgs = {}) {
-    super();
-    this.required_error = required_error;
-    this.invalid_type_errpr = invalid_type_error;
+  constructor(args: SchemaArgs = {}) {
+    super(isString, args);
   }
 
   parse = (value: unknown): string => {
-    if (value === null || value === undefined) {
-      if (this.required_error) throw new Error(this.required_error);
-      throw new Error(`This value is required. Got ${value}`);
-    }
+    const stringValue = super.parse(value);
 
-    if (typeof value !== 'string') {
-      if (this.invalid_type_errpr) throw new Error(this.invalid_type_errpr);
-      throw new Error(`Expected string. Got '${typeof value}'`);
-    }
-
-    if (this.minLength !== undefined && this.minLength.value > value.length) {
+    if (
+      this.minLength !== undefined &&
+      this.minLength.value > stringValue.length
+    ) {
       if (this.minLength.message) throw new Error(this.minLength.message);
       throw new Error(
-        `Expected length >= ${this.minLength.value}. Got ${value.length}.`
+        `Expected length >= ${this.minLength.value}. Got ${stringValue.length}.`
       );
     }
 
-    if (this.maxLength !== undefined && this.maxLength.value < value.length) {
+    if (
+      this.maxLength !== undefined &&
+      this.maxLength.value < stringValue.length
+    ) {
       if (this.maxLength.message) throw new Error(this.maxLength.message);
       throw new Error(
-        `Expected length <= ${this.maxLength}. Got ${value.length}.`
+        `Expected length <= ${this.maxLength}. Got ${stringValue.length}.`
       );
     }
 
     if (
       this.valueLength !== undefined &&
-      this.valueLength.value !== value.length
+      this.valueLength.value !== stringValue.length
     ) {
       if (this.valueLength.message) throw new Error(this.valueLength.message);
       throw new Error(
-        `Expected length === ${this.valueLength}. Got ${value.length}.`
+        `Expected length === ${this.valueLength}. Got ${stringValue.length}.`
       );
     }
 
-    if (this.isEmail.value && EMAIL_REGEX.test(value) === false) {
+    if (this.isEmail.value && EMAIL_REGEX.test(stringValue) === false) {
       if (this.isEmail.message) throw new Error(this.isEmail.message);
       throw new Error('Expected a valid email address.');
     }
 
     if (
       this.valueStarts !== undefined &&
-      value.startsWith(this.valueStarts.value) === false
+      stringValue.startsWith(this.valueStarts.value) === false
     ) {
       if (this.valueStarts.message) throw new Error(this.valueStarts.message);
       throw new Error(
@@ -84,13 +75,13 @@ export class StringSchema extends SchemaClass<string> {
 
     if (
       this.valueEnds !== undefined &&
-      value.endsWith(this.valueEnds.value) === false
+      stringValue.endsWith(this.valueEnds.value) === false
     ) {
       if (this.valueEnds.message) throw new Error(this.valueEnds.message);
       throw new Error(`Expected value to end with '${this.valueEnds.value}'.`);
     }
 
-    return value;
+    return stringValue;
   };
 
   min: SchemaBuilder<string, number> = (minLength, opts): this => {
