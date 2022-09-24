@@ -1,5 +1,5 @@
-import { SchemaArgs } from '../lzod.types';
-import { BaseSchema } from './base/base.schema';
+import { SchemaArgs } from '../../lzod.types';
+import { BaseSchema } from '../base/base.schema';
 
 type Primitive = string | boolean | number;
 
