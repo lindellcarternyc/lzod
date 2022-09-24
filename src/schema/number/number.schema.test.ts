@@ -120,4 +120,24 @@ describe(numberSchema, () => {
       );
     });
   });
+
+  describe('negative', () => {
+    it('ensures a negative number', () => {
+      const neg = numberSchema().negative();
+
+      expect(neg.parse(-1)).toBe(-1);
+      expect(() => neg.parse(0)).toThrow('Expected a negative number. Got 0.');
+    });
+  });
+
+  describe('nonpositive', () => {
+    it('ensures a non-positive number', () => {
+      const nonPos = numberSchema().nonpositive();
+
+      expect(nonPos.parse(0)).toBe(0);
+      expect(() => nonPos.parse(1)).toThrow(
+        'Expected a non-positive number. Got 1.'
+      );
+    });
+  });
 });

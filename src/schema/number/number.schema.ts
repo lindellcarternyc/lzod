@@ -23,6 +23,14 @@ class NumberSchema extends BaseSchema<number> {
     value: false,
   };
 
+  #negative: ParserArgs<boolean> = {
+    value: false,
+  };
+
+  #nonpositive: ParserArgs<boolean> = {
+    value: false,
+  };
+
   constructor(args?: SchemaArgs) {
     super(isNumber, args);
   }
@@ -76,6 +84,23 @@ class NumberSchema extends BaseSchema<number> {
         `Expected a non-negative number. Got ${numValue}.`;
       throw new Error(message);
     }
+
+    if (this.#negative.value === true && numValue >= 0) {
+      const message =
+        this.#negative.message ??
+        `Expected a negative number. Got ${numValue}.`;
+
+      throw new Error(message);
+    }
+
+    if (this.#nonpositive.value === true && numValue > 0) {
+      const message =
+        this.#nonpositive.message ??
+        `Expected a non-positive number. Got ${numValue}.`;
+
+      throw new Error(message);
+    }
+
     return numValue;
   }
 
@@ -140,6 +165,24 @@ class NumberSchema extends BaseSchema<number> {
       value: true,
       ...opts,
     };
+    return this;
+  };
+
+  negative: SchemaBuilder<number> = opts => {
+    this.#negative = {
+      value: true,
+      ...opts,
+    };
+
+    return this;
+  };
+
+  nonpositive: SchemaBuilder<number> = opts => {
+    this.#nonpositive = {
+      value: true,
+      ...opts,
+    };
+
     return this;
   };
 }
