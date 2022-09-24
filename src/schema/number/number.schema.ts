@@ -15,6 +15,10 @@ class NumberSchema extends BaseSchema<number> {
     value: false,
   };
 
+  #positive: ParserArgs<boolean> = {
+    value: false,
+  };
+
   constructor(args?: SchemaArgs) {
     super(isNumber, args);
   }
@@ -52,6 +56,13 @@ class NumberSchema extends BaseSchema<number> {
 
     if (this.#int.value === true && Math.floor(numValue) !== numValue) {
       const message = this.#int.message ?? 'Expected an integer.';
+      throw new Error(message);
+    }
+
+    if (this.#positive.value === true && numValue <= 0) {
+      const message =
+        this.#positive.message ??
+        `Expected a positive number. Got ${numValue}.`;
       throw new Error(message);
     }
 
@@ -98,6 +109,15 @@ class NumberSchema extends BaseSchema<number> {
 
   int: SchemaBuilder<number> = opts => {
     this.#int = {
+      value: true,
+      ...opts,
+    };
+
+    return this;
+  };
+
+  positive: SchemaBuilder<number> = opts => {
+    this.#positive = {
       value: true,
       ...opts,
     };

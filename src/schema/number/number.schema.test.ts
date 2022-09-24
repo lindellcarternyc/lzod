@@ -99,4 +99,14 @@ describe(numberSchema, () => {
       expect(() => int.parse(0.1)).toThrow();
     });
   });
+
+  describe('positive', () => {
+    it('ensures a positive number', () => {
+      const pos = numberSchema().positive();
+
+      expect(pos.parse(100)).toBe(100);
+
+      expect(() => pos.parse(0)).toThrow('Expected a positive number. Got 0.');
+    });
+  });
 });
