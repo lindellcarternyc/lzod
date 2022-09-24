@@ -4,7 +4,7 @@ import { BaseSchema } from '../base/base.schema';
 const isNumber = (x: unknown): x is number =>
   typeof x === 'number' && !isNaN(x);
 
-class NumberSchema extends BaseSchema<number> {
+export class NumberSchema extends BaseSchema<number> {
   #gt?: ParserArgs<number>;
   #gte?: ParserArgs<number>;
 

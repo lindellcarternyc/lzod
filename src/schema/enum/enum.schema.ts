@@ -9,7 +9,7 @@ const stringArrayTypes = (values: Readonly<string[]>): string => {
 
 type Enum<Values extends string> = { [K in Values]: K };
 
-class EnumSchema<Value extends string> extends BaseSchema<
+export class EnumSchema<Value extends string> extends BaseSchema<
   StringArrayTypes<Value[]>
 > {
   readonly enum: Enum<StringArrayTypes<Value[]>>;
