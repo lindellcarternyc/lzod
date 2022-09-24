@@ -19,3 +19,5 @@ export type SchemaFactory<SchemaType> = (
 export type SchemaBuilder<SchemaType, Arg = null> = Arg extends null | undefined
   ? (opts?: { message: string }) => Schema<SchemaType>
   : (_: Arg, opts?: { message: string }) => Schema<SchemaType>;
+
+export type TypeCheck = (_: unknown) => boolean;
