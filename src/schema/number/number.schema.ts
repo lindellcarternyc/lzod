@@ -19,6 +19,10 @@ class NumberSchema extends BaseSchema<number> {
     value: false,
   };
 
+  #nonnegative: ParserArgs<boolean> = {
+    value: false,
+  };
+
   constructor(args?: SchemaArgs) {
     super(isNumber, args);
   }
@@ -66,6 +70,12 @@ class NumberSchema extends BaseSchema<number> {
       throw new Error(message);
     }
 
+    if (this.#nonnegative.value === true && numValue < 0) {
+      const message =
+        this.#nonnegative.message ??
+        `Expected a non-negative number. Got ${numValue}.`;
+      throw new Error(message);
+    }
     return numValue;
   }
 
@@ -122,6 +132,14 @@ class NumberSchema extends BaseSchema<number> {
       ...opts,
     };
 
+    return this;
+  };
+
+  nonnegative: SchemaBuilder<number> = opts => {
+    this.#nonnegative = {
+      value: true,
+      ...opts,
+    };
     return this;
   };
 }

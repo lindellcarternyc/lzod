@@ -109,4 +109,15 @@ describe(numberSchema, () => {
       expect(() => pos.parse(0)).toThrow('Expected a positive number. Got 0.');
     });
   });
+
+  describe('nonnegative', () => {
+    it('ensures a non-negative number', () => {
+      const non = numberSchema().nonnegative();
+
+      expect(non.parse(0)).toBe(0);
+      expect(() => non.parse(-1)).toThrow(
+        'Expected a non-negative number. Got -1.'
+      );
+    });
+  });
 });
