@@ -21,7 +21,7 @@ export class StringSchema extends BaseSchema<string> {
 
   private valueEnds?: ParserArgs<string>;
 
-  constructor(args: SchemaArgs = {}) {
+  constructor(args: SchemaArgs) {
     super(isString, args);
   }
 

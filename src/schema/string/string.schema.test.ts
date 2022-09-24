@@ -93,6 +93,10 @@ describe(stringSchema, () => {
       expect(s.parse('hello world')).toBe('hello world');
       // eslint-disable-next-line quotes
       expect(() => s.parse('nope')).toThrow("'hello'");
+
+      expect(() =>
+        stringSchema().startsWith('hello', { message: 'NOPE' }).parse('well')
+      ).toThrow('NOPE');
     });
   });
 
