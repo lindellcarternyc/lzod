@@ -11,6 +11,10 @@ class NumberSchema extends BaseSchema<number> {
   #lt?: ParserArgs<number>;
   #lte?: ParserArgs<number>;
 
+  #int: ParserArgs<boolean> = {
+    value: false,
+  };
+
   constructor(args?: SchemaArgs) {
     super(isNumber, args);
   }
@@ -45,6 +49,12 @@ class NumberSchema extends BaseSchema<number> {
         `Expected number <= ${this.#lte.value}. Got ${numValue}.`;
       throw new Error(message);
     }
+
+    if (this.#int.value === true && Math.floor(numValue) !== numValue) {
+      const message = this.#int.message ?? 'Expected an integer.';
+      throw new Error(message);
+    }
+
     return numValue;
   }
 
@@ -85,6 +95,15 @@ class NumberSchema extends BaseSchema<number> {
   };
 
   max = this.lte;
+
+  int: SchemaBuilder<number> = opts => {
+    this.#int = {
+      value: true,
+      ...opts,
+    };
+
+    return this;
+  };
 }
 
 export const numberSchema = (args?: SchemaArgs) => {

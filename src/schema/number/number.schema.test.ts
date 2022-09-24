@@ -86,4 +86,17 @@ describe(numberSchema, () => {
       );
     });
   });
+
+  describe('int', () => {
+    it('ensures a value is an integer', () => {
+      const ints = [-10, 0, 1, 5, 100.0];
+      const int = numberSchema().int();
+
+      for (const i of ints) {
+        expect(int.parse(i)).toEqual(i);
+      }
+
+      expect(() => int.parse(0.1)).toThrow();
+    });
+  });
 });
