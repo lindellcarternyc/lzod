@@ -21,3 +21,5 @@ export type SchemaBuilder<SchemaType, Arg = null> = Arg extends null | undefined
   : (_: Arg, opts?: { message: string }) => Schema<SchemaType>;
 
 export type TypeCheck = (_: unknown) => boolean;
+
+export type Infer<S extends Schema<unknown>> = ReturnType<S['parse']>;

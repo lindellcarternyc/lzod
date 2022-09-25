@@ -1,4 +1,4 @@
-import { Schema, SchemaArgs } from '../../lzod.types';
+import { Infer, Schema, SchemaArgs } from '../../lzod.types';
 import { BaseSchema } from '../base/base.schema';
 import { enumSchema, EnumSchema } from '../enum/enum.schema';
 
@@ -9,13 +9,13 @@ type Keys<R extends Record<string, unknown>> = keyof R;
 class ObjectSchema<
   SMap extends Record<string, Schema<unknown>>
 > extends BaseSchema<{
-  [K in keyof SMap]: ReturnType<SMap[K]['parse']>;
+  [K in keyof SMap]: Infer<SMap[K]>;
 }> {
   constructor(private readonly schema: SMap, args?: SchemaArgs) {
     super(v => typeof v === 'object' && Array.isArray(v) === false, args);
   }
 
-  parse(value: unknown): { [K in keyof SMap]: ReturnType<SMap[K]['parse']> } {
+  parse(value: unknown): { [K in keyof SMap]: Infer<SMap[K]> } {
     const objectValue = super.parse(value);
 
     const result = Object.keys(this.schema).reduce(
